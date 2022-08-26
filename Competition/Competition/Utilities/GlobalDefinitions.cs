@@ -12,18 +12,17 @@ namespace Competition.Utilities
 {
     public class GlobalDefinitions
     {
-
+        //IWebDriver driver;
         //Initialise the browser
 
         public static IWebDriver driver { get; set; }
 
         #region WaitforElement 
 
-        public static void wait(int second)
+        public static void wait(IWebDriver driver, int second)
         {
             driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(second);
-
-        }
+         }
         public static IWebElement WaitForElement(IWebDriver driver, By by, int timeOutinSeconds)
         {
             WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(timeOutinSeconds));

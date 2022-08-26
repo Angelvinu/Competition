@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Competition.Utilities.GlobalDefinitions;
 
 
 [assembly: Parallelizable(ParallelScope.Fixtures)]
@@ -37,19 +38,25 @@ namespace Competition.Tests // Note: actual namespace depends on the project nam
             test = extent.CreateTest(TestContext.CurrentContext.Test.Name);
             ManageListing ManageListingObj = new ManageListing(driver);
 
-            Thread.Sleep(2000);
+            wait(driver, 3);
             ManageListingObj.ClickOnManageListing();
-            Thread.Sleep(2000);
+            wait(driver, 2);
             ManageListingObj.ViewListingOption();
-            Thread.Sleep(2000);
+            wait(driver, 2);
 
-            string ViewListXlTitle = ManageListingObj.ViewListXl().ToString();
-            string ViewListPageTitle = ManageListingObj.ViewListPage().ToString();
-            string ViewListXlCategory = ManageListingObj.ViewListXl2().ToString();
-            string ViewListPageCategory = ManageListingObj.ViewListPage2().ToString();
+            string ViewListXlTitle = ManageListingObj.ViewListXl();
+            string ViewListPageTitle = ManageListingObj.ViewListPage();
+            string ViewListXlCategory = ManageListingObj.ViewListXl2();
+            string ViewListPageCategory = ManageListingObj.ViewListPage2();
+            string ViewListXlDescription = ManageListingObj.ViewDescriptionXl2();
+            string ViewListPageDescription = ManageListingObj.ViewDescriptionPage();
+            string ViewListXlSubCategory = ManageListingObj.ViewSubCategoryXl2();
+            string ViewListPageSubCategory = ManageListingObj.ViewSubCategoryPage();
 
             Assert.That(ViewListXlTitle == ViewListPageTitle, "Viewed Category doesnot match");
             Assert.That(ViewListXlCategory == ViewListPageCategory, "Viewed Title doesnot match");
+            Assert.That(ViewListXlDescription == ViewListPageDescription, "Viewed Description doesnot match");
+            Assert.That(ViewListXlSubCategory == ViewListPageSubCategory, "Viewed SubCategory doesnot match");
         }
         [Test, Order(3)]
         public void EditManageListing()
@@ -57,15 +64,24 @@ namespace Competition.Tests // Note: actual namespace depends on the project nam
             test = extent.CreateTest(TestContext.CurrentContext.Test.Name);
             ManageListing ManageListingObj = new ManageListing(driver);
 
-            Thread.Sleep(2000);
+            wait(driver, 2);
             ManageListingObj.ClickOnManageListing();
             ManageListingObj.EditList();
-            Thread.Sleep(2000);
+            wait(driver, 2);
 
-            string EditListXlTitle = ManageListingObj.EditListXl().ToString();
-            string EditListPage = ManageListingObj.EditListPage().ToString();
+
+            string EditListXlTitle = ManageListingObj.EditListXl();
+            string EditListPage = ManageListingObj.EditListPage();
+            string EditListXlDescription = ManageListingObj.EditDescriptionXl();
+            string EditListPageDescription = ManageListingObj.EditDescriptionPage();
+            string EditListXlCategory = ManageListingObj.EditCategoryXl();
+            string EditListPageCategory = ManageListingObj.EditCategoryPage();
+           
 
             Assert.That(EditListXlTitle == EditListPage, "Edit Title doesnot match");
+            Assert.That(EditListXlDescription == EditListPageDescription, "Edit Description doesnot match");
+            Assert.That(EditListXlCategory == EditListPageCategory,"Edit Category doesnot match");
+           
 
         }
         [Test, Order(4)]
@@ -74,13 +90,13 @@ namespace Competition.Tests // Note: actual namespace depends on the project nam
             test = extent.CreateTest(TestContext.CurrentContext.Test.Name);
             ManageListing ManageListingObj = new ManageListing(driver);
 
-            Thread.Sleep(2000);
+            wait(driver, 2);
             ManageListingObj.ClickOnManageListing();
-            Thread.Sleep(2000);
+            wait(driver, 2);
             ManageListingObj.DeleteList();
-            Thread.Sleep(1000);
+            wait(driver, 2);
 
-            string DeletedList = ManageListingObj.Deleted().ToString();
+            string DeletedList = ManageListingObj.Deleted();
 
             Assert.That(DeletedList != "Selenium" || DeletedList != "Java", "Skill is not deleted successfully");
 

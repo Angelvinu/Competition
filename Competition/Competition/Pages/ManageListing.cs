@@ -14,12 +14,12 @@ namespace Competition.Pages
 {
     public class ManageListing : CommonDriver
     {
-        public IWebDriver _driver;
+        public IWebDriver driver;
         ManageListing ManageListingObj;
 
         public ManageListing(IWebDriver driver)
         {
-            _driver = driver;
+            this.driver = driver;
            // PageFactory.InitElements(driver, this);
         }
 
@@ -32,8 +32,9 @@ namespace Competition.Pages
 
         private IWebElement ViewCategory => driver.FindElement(By.XPath(CategoryValue));
         private IWebElement ViewTitle => driver.FindElement(By.XPath(TitleValue));
-        //private IWebElement Category => driver.FindElement(By.XPath(LastCategory));
-        //private IWebElement Title => driver.FindElement(By.XPath(LastTitle));
+        private IWebElement ViewDescription => driver.FindElement(By.XPath(ViewDescriptionValue));
+        private IWebElement ViewSubCategory => driver.FindElement(By.XPath(ViewSubCategoryValue));
+        private IWebElement ViewServiceType => driver.FindElement(By.XPath(ServiceTypeValue));
 
         //Enter the Title 
         private IWebElement Title => driver.FindElement(By.Name("title"));
@@ -90,11 +91,7 @@ namespace Competition.Pages
         //Enter the amount for Credit
         private IWebElement CreditAmount => driver.FindElement(By.XPath(CreditAmountXpath));
 
-        //Edit listing
-        private IWebElement EditListing => driver.FindElement(By.XPath(EditListingValue));
-
-        
-
+    
         //Delete listing
         private IWebElement DeleteListing => driver.FindElement(By.XPath(DeleteListingValue));
 
@@ -109,8 +106,15 @@ namespace Competition.Pages
         //select the last element to delete
         private IWebElement Delete => driver.FindElement(By.XPath("//tbody/tr[1]/td[3]"));
 
-       
+
+        //Edit listing
+        private IWebElement EditListing => driver.FindElement(By.XPath(EditListingValue));
         private IWebElement EditTitle => driver.FindElement(By.XPath(EditTitle1));
+        private IWebElement EditDescription => driver.FindElement(By.XPath(EditDescriptionValue));
+        private IWebElement EditCategory => driver.FindElement(By.XPath(EditCategoryValue));
+       
+
+
 
         //Xpath
 
@@ -125,7 +129,6 @@ namespace Competition.Pages
         private string ServiceTypeXpath = "//*[@id='service-listing-section']/div[2]/div/form/div[5]/div[2]/div[1]";
         private string ServiceTypeOption1Xpath = "//*[@id='service-listing-section']/div[2]/div/form/div[5]/div[2]/div[1]/div[1]/div/input";
         private string ServiceTypeOption2Xpath = "//*[@id='service-listing-section']/div[2]/div/form/div[5]/div[2]/div[1]/div[2]/div/input";
-        private string EditTitle1 = "//*[@id='listing-management-section']/div[2]/div[1]/div[1]/table/tbody/tr[1]/td[3]";
         private string ManageListingTabValue = "//div/section[1]/div/a[3]";
         private string ViewListingValue = "//tbody/tr[1]/td[8]/div[1]/button[1]";
         private string EditListingValue = "//tbody/tr[1]/td[8]/div[1]/button[2]";
@@ -133,72 +136,131 @@ namespace Competition.Pages
         private string ClickActionsValue = "//div[@class='actions']";
         private string CategoryValue = "//div[contains(text(),'Programming & Tech')]";
         private string TitleValue = "//span[contains(text(),'Selenium')]";
-
-
-
+        private string ViewDescriptionValue = "//div[contains(text(),'Would like to provide selenium training for beginn')]";
+        private string ViewSubCategoryValue = "//div[contains(text(),'QA')]";
+        private string ServiceTypeValue = "//div[contains(text(),'One-off')]";
+        private string EditTitle1 = "//*[@id='listing-management-section']/div[2]/div[1]/div[1]/table/tbody/tr[1]/td[3]";
+        private string EditDescriptionValue = "//*[@id='listing-management-section']/div[2]/div[1]/div[1]/table/tbody/tr[1]/td[4]";
+        private string EditCategoryValue = "//*[@id='listing-management-section']/div[2]/div[1]/div[1]/table/tbody/tr[1]/td[2]";
        
 
 
-    public void ClickOnManageListing()
+
+
+
+        public void ClickOnManageListing()
         {
             //identify the Manage listing and click on it
-            Thread.Sleep(4000);
+            //wait(3);
             ManageListingTab.Click();
-            Thread.Sleep(2000);
-            
-            // WaitHelpers.WaitToBeClickable(driver, "XPath", ManageListingTabValue, 5);
-        }
+            wait(driver, 1);
 
+        }
+        //View Details of a selected row
         public void ViewListingOption()
         {
 
-            //WaitHelpers.WaitToBeClickable(driver, "XPath", ViewListingValue, 5);
-            // ViewListing.Click();
-
             //identify the view listing and click on it
-            Thread.Sleep(3000);
+           // wait(3);
             ViewListing.Click();
-            Thread.Sleep(2000);
-
+            wait(driver, 1);
         }
-   
-    public string ViewListXl()
+        //Get the Title from excel to check assertion
+        public string ViewListXl()
         {
             //take the Title from excel
             ExcelLib.PopulateInCollection(CommonDriver.ExcelPath, "ShareSkill");
-            string Title = ExcelLib.ReadData(2, "Title").ToString();
-            return Title; 
+            string Title = ExcelLib.ReadData(2, "Title");
+            return Title;
 
         }
+
+        //Get the Title from list to check assertion
         public string ViewListPage()
-        { 
+        {
             //take the Title from Page
             return ViewTitle.Text;
         }
+
+        //Get the Category from excel to check assertion
         public string ViewListXl2()
         {
             //take the Category from excel
             ExcelLib.PopulateInCollection(CommonDriver.ExcelPath, "ShareSkill");
-            string Category = ExcelLib.ReadData(2, "Category").ToString();
+            string Category = ExcelLib.ReadData(2, "Category");
             return Category;
         }
+        //Get the Category from list to check assertion
         public string ViewListPage2()
         {
             //take the Category from Page
             return ViewCategory.Text;
         }
 
+        
+        //Get the view description from excel to check assertion
+        public string ViewDescriptionXl2()
+        {
+            ExcelLib.PopulateInCollection(CommonDriver.ExcelPath, "ShareSkill");
+            string Description = ExcelLib.ReadData(2, "Description");
+            return Description;
+        }
+        //Get the view description from list to check assertion
+        public string ViewDescriptionPage()
+        {
+            //take the description from page
+            return ViewDescription.Text;
+        }
+        //Get the view SubCategory from excel to check assertion
+        public string ViewSubCategoryXl2()
+        {
+            ExcelLib.PopulateInCollection(CommonDriver.ExcelPath, "ShareSkill");
+            string SubCategory = ExcelLib.ReadData(2, "SubCategory");
+            return SubCategory;
+        }
+        public string ViewSubCategoryPage()
+        {
+            //take subcategory from page
+            return ViewSubCategory.Text;
+        }
+
+
+
+        //Edit Details of a selected row
         public void EditList()
         {
             //identify the edit option and click on it
-            Thread.Sleep(2000);
+            wait(driver, 2);
             EditListing.Click();
-            Thread.Sleep(2000);
-
+            wait(driver, 2);
             //Fetch Title from excelsheet
             ExcelLib.PopulateInCollection(CommonDriver.ExcelPath, "ShareSkill");
+            TitleEnter();
+            DescriptionEnter();
+            SelectCategory();
+            SubCategory();
+            TagsEnter();
+            ServiceTypeSelect();
+            LocationSelect();
+            StartDateselection();
+            dateTimeSelect();
+            SkillTrade();
+            FileUpload();
+            Active();
+            //click on save option
+            Save.Click();
+            wait(driver, 2);
+            ManageListingTab.Click();
+            wait(driver, 2);
 
 
+        }
+
+       
+               
+        //Enter Title
+        public void TitleEnter()
+        {
             //Enter the Title
             string TitleXl = ExcelLib.ReadData(3, "Title").ToString();
             string TitlePage = Title.Text;
@@ -209,6 +271,11 @@ namespace Competition.Pages
                 Title.SendKeys(TitleXl);
             }
 
+        }
+
+        //Description 
+        public void DescriptionEnter()
+        {
             //Enter the description
             string DescriptionXl = ExcelLib.ReadData(3, "Description").ToString();
             string DescriptionPage = Description.Text;
@@ -218,8 +285,13 @@ namespace Competition.Pages
                 Description.Clear();
                 Description.SendKeys(DescriptionXl);
             }
+        }
 
-            //Enter the description
+        //Select Category
+
+        public void SelectCategory()
+        {
+            //Enter the Category
             string CategoryDropDownXl = ExcelLib.ReadData(3, "Category").ToString();
             string CategoryDropDownPage = CategoryDropDown.Text;
 
@@ -229,10 +301,14 @@ namespace Competition.Pages
                 //Select the category
                 var SelectCategory = new SelectElement(CategoryDropDown);
                 SelectCategory.SelectByText(ExcelLib.ReadData(3, "Category"));
-                Thread.Sleep(1000);
+                wait(driver, 1);
             }
+        }
 
-            //Enter the description
+        //Enter SubCategory
+        public void SubCategory()
+        {
+            //Enter the SubCategory
             string SubCategoryDropDownXl = ExcelLib.ReadData(3, "SubCategory").ToString();
             string SubCategoryDropDownPage = SubCategoryDropDown.Text;
 
@@ -242,10 +318,14 @@ namespace Competition.Pages
                 //Select the Subcategory
                 var SelectSubCategory = new SelectElement(SubCategoryDropDown);
                 SelectSubCategory.SelectByText(ExcelLib.ReadData(3, "SubCategory"));
-                Thread.Sleep(1000);
+                wait(driver, 1);
             }
 
+        }
 
+        //Tags 
+        public void TagsEnter()
+        {
             //Enter Tags
             string TagXl = ExcelLib.ReadData(3, "Tags").ToString();
             string TagPage = Tags.Text;
@@ -257,9 +337,12 @@ namespace Competition.Pages
                 //enter Tag
                 Tags.SendKeys(ExcelLib.ReadData(3, "Tags"));
                 Tags.SendKeys(Keys.Return);
-                Thread.Sleep(1000);
+                wait(driver, 1);
             }
+        }
 
+        public void ServiceTypeSelect()
+        {
             //    //Enter Service type 
 
             string ServiceTypexl = ExcelLib.ReadData(3, "ServiceType").ToString();
@@ -275,9 +358,12 @@ namespace Competition.Pages
                 {
                     ServiceTypeOption1.Click();
                 }
-                Thread.Sleep(1000);
+                wait(driver, 1);
             }
+        }
 
+        public void LocationSelect()
+        {
             //    //Select Location Type
             string LocationTypexl = ExcelLib.ReadData(3, "LocationType").ToString();
             string LocationTypePage = LocationType.Text;
@@ -292,10 +378,14 @@ namespace Competition.Pages
                 {
                     LocationTypeOption2.Click();
                 }
-                Thread.Sleep(1000);
+                wait(driver, 1);
 
             }
+        }
 
+        //Start and End Date 
+        public void StartDateselection()
+        {
             //    //enter the start date
             string StartDateDropDownXl = ExcelLib.ReadData(3, "Startdate").ToString();
             string StartDateDropDownPage = StartDateDropDown.Text;
@@ -304,7 +394,7 @@ namespace Competition.Pages
             {
                 StartDateDropDown.Click();
                 StartDateDropDown.SendKeys(ExcelLib.ReadData(3, "Startdate"));
-                Thread.Sleep(1000);
+                wait(driver, 1);
             }
 
 
@@ -316,16 +406,14 @@ namespace Competition.Pages
             {
                 EndDateDropDown.Click();
                 EndDateDropDown.SendKeys(ExcelLib.ReadData(3, "Enddate"));
-                Thread.Sleep(1000);
+                wait(driver, 1);
             }
+        }
 
-            //    //Clear tags
-            //    int countTags = displayedTags.Count();
-            //    for (int i = 0; i < countTags; i++)
-            //    {
-            //        if (countTags > 0)
-            //            displayedTags[i].Click();
-            //    }
+
+        //Days selection with time
+        public void dateTimeSelect()
+        {
 
             // Clear all the existing timings 
 
@@ -401,63 +489,54 @@ namespace Competition.Pages
             }
 
 
-            Thread.Sleep(1000);
+            wait(driver, 1);
+        }
 
+        //Skill Trade Selection
+        public void SkillTrade()
+        {
 
             //enter skill trade
 
             string SkillTradeExcel = ExcelLib.ReadData(3, "SkillTrade").ToString();
-           // string SkillTradePage = SkillTradeOption.Text;
+          
 
             if (SkillTradeExcel != null || SkillTradeExcel != "")
             {
                 if (SkillTradeExcel == "Skill-exchange")
                 {
-                    //string SkillTradexl = ExcelLib.ReadData(2, "SkillTrade");
-
+                    
                     SkillTradeOption1.Click();
 
                     //enter skill-exchange
                     SkillExchange.Click();
                     SkillExchange.SendKeys(ExcelLib.ReadData(3, "Skill-Exchange"));
                     SkillExchange.SendKeys(Keys.Return);
-                    //Thread.Sleep(1000);
+                   
 
                 }
                 else
                 {
                     SkillTradeOption2.Click();
+
                     //enter Credit
                     CreditAmount.Click();
                     CreditAmount.SendKeys(ExcelLib.ReadData(3, "Credit"));
                     CreditAmount.SendKeys(Keys.Return);
-                    //Thread.Sleep(1000);
-
+                    
                 }
             }
-                //Thread.Sleep(1000);
-            
+        }
 
-
-            //file upload
-
-            WorkSamples.Click();
-
-            using (Process exeProcess = Process.Start(CommonDriver.AutoScriptPathEdit))
-            {
-                exeProcess.WaitForExit();
-                Thread.Sleep(2000);
-            }
-
-
-            Thread.Sleep(2000);
-
+        //Active Radio button selection
+        public void Active()
+        {
             //select the active radio button
             string ActiveSelectionxl = ExcelLib.ReadData(3, "Active").ToString();
             string ActiveSelection = SkillTradeOption.Text;
 
 
-            if (ActiveSelectionxl!=null && ActiveSelectionxl == "Active")
+            if (ActiveSelectionxl != null && ActiveSelectionxl == "Active")
             {
                 SelectActive.Click();
             }
@@ -465,26 +544,27 @@ namespace Competition.Pages
             {
                 SelectHidden.Click();
             }
-
-           
-
-            //click on save option
-            Save.Click();
-
-            Thread.Sleep(4000);
-
-            ManageListingTab.Click();
-
-            Thread.Sleep(4000);
-
-
         }
 
+        //File Upload
+        public void FileUpload()
+        {
+            //file upload
+
+            WorkSamples.Click();
+
+            using (Process exeProcess = Process.Start(CommonDriver.AutoScriptPathEdit))
+            {
+                exeProcess.WaitForExit();
+                wait(driver, 1);
+            }
+
+        }
         public string EditListXl()
         {
             //check the Title from excel
             ExcelLib.PopulateInCollection(CommonDriver.ExcelPath, "ShareSkill");
-            string Title = ExcelLib.ReadData(3, "Title").ToString();
+            string Title = ExcelLib.ReadData(3, "Title");
             return Title;
 
         }
@@ -493,15 +573,42 @@ namespace Competition.Pages
         {
             return EditTitle.Text;
         }
+        public string EditDescriptionXl()
+        {
+            //check the Description from excel
+            ExcelLib.PopulateInCollection(CommonDriver.ExcelPath, "ShareSkill");
+            string Description = ExcelLib.ReadData(3, "Description");
+            return Description;
+        }
 
+        public string EditDescriptionPage()
+        {
+            return EditDescription.Text;
+        }
+        public string EditCategoryXl()
+        {
+            //check the category from excel
+            ExcelLib.PopulateInCollection(CommonDriver.ExcelPath, "ShareSkill");
+            string Category = ExcelLib.ReadData(3, "Category");
+            return Category;
+        }
+        public string EditCategoryPage()
+        {
+            return EditCategory.Text;
+        }
+
+
+        //Delete Details of a selected row
         public void DeleteList()
         {
             //identify the delete option and click on it
-            Thread.Sleep(2000);
+            wait(driver, 1);
             DeleteListing.Click();
-            Thread.Sleep(2000);
+            wait(driver, 1);
             ClickAction.Click();
         }
+
+
 
         public string Deleted()
         {
